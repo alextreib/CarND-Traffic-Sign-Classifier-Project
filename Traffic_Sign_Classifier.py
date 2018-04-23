@@ -27,6 +27,7 @@
 
 # Load pickled data
 import pickle
+import sys
 
 # TODO: Fill this in based on where you saved the training and testing data
 training_file = '../datasets/traffic-signs-data/train.p'
@@ -225,7 +226,7 @@ def preprocess(x_data):
     # Normalization
     #x_data_normalized= (x_data_gry - 128)/128
     #x_data=x_data.astype(np.int16)
-    #x_data = (x_data - 128)/128 
+    x_data = (x_data - 128)/128 
     #x_data=normalize(x_data)
     #print (np.mean(x_data[0]))
 
@@ -237,6 +238,8 @@ def preprocess(x_data):
 
 
 #X_train=X_train
+print (X_train.shape)
+print (type(X_train))
 X_train=preprocess(X_train)
 X_valid=preprocess(X_valid)
 
@@ -247,7 +250,7 @@ X_valid=preprocess(X_valid)
 # Shuffle!
 from sklearn.utils import shuffle
 
-# X_train, y_train = shuffle(X_train, y_train)
+X_train, y_train = shuffle(X_train, y_train)
 
 print ('done')
 
@@ -263,8 +266,7 @@ def LeNet(x):
 # Hyperparameters
     mu = 0
     sigma = 0.1
-    keep_prob=0.65
-    
+        
     # TODO: Layer 1: Convolutional. Input = 32x32x1. Output = 28x28x6.
     W1 = tf.Variable(tf.truncated_normal(shape=(5, 5, 1, 6), mean = mu, stddev = sigma), name="W1")
     x = tf.nn.conv2d(x, W1, strides=[1, 1, 1, 1], padding='VALID')
@@ -317,28 +319,29 @@ def LeNet(x):
     # Dropout
     x = tf.nn.dropout(x, keep_prob)
     
-    # TODO: Layer 4: Fully Connected. Input = 800. Output = 43.
-    W4 = tf.Variable(tf.truncated_normal(shape=(800, 43), mean = mu, stddev = sigma), name="W4")
-    b4 = tf.Variable(tf.zeros(43), name="b4")    
-    logits = tf.add(tf.matmul(x, W4), b4)
+    # TODO: Layer 4: Fully Connected. Input = 800. Output = 120.
+    
+    W4 = tf.Variable(tf.truncated_normal(shape=(800, 120), mean = mu, stddev = sigma), name="W4")
+    b4 = tf.Variable(tf.zeros(120), name="b4")    
+    x = tf.add(tf.matmul(x, W4), b4)
     
     # TODO: Activation.
-    #x = tf.nn.relu(x)
+    x = tf.nn.relu(x)
 
     # TODO: Layer 5: Fully Connected. Input = 120. Output = 84.
-    #W5 = tf.Variable(tf.truncated_normal(shape=(120, 84), mean = mu, stddev = sigma))
-    #b5 = tf.Variable(tf.zeros(84)) 
-    #x = tf.add(tf.matmul(x, W5), b5)
+    W5 = tf.Variable(tf.truncated_normal(shape=(120, 84), mean = mu, stddev = sigma))
+    b5 = tf.Variable(tf.zeros(84)) 
+    x = tf.add(tf.matmul(x, W5), b5)
     
     # TODO: Activation.
-    #x = tf.nn.relu(x)
+    x = tf.nn.relu(x)
 
     # TODO: Layer 6: Fully Connected. Input = 84. Output = 43.
-    #W6 = tf.Variable(tf.truncated_normal(shape=(84, 43), mean = mu, stddev = sigma))
-    #b6 = tf.Variable(tf.zeros(43)) 
-    #logits = tf.add(tf.matmul(x, W6), b6)
-
-    return logits
+    W6 = tf.Variable(tf.truncated_normal(shape=(84, 43), mean = mu, stddev = sigma))
+    b6 = tf.Variable(tf.zeros(43)) 
+    x = tf.add(tf.matmul(x, W6), b6)
+    
+    return x
 
 
 # ### Train, Validate and Test the Model
@@ -358,14 +361,15 @@ import tensorflow as tf
 from sklearn.utils import shuffle
 
 
-EPOCHS = 10
+EPOCHS = 40
 BATCH_SIZE = 128
 
+keep_prob = tf.placeholder(tf.float32) # probability to keep units
 x = tf.placeholder(tf.float32, (None, 32, 32, 1))
 y = tf.placeholder(tf.int32, (None))
 one_hot_y = tf.one_hot(y, 43)
 
-rate = 0.0001
+rate = 0.001
 
 logits = LeNet(x)
 cross_entropy = tf.nn.softmax_cross_entropy_with_logits(labels=one_hot_y, logits=logits)
@@ -384,29 +388,34 @@ def evaluate(X_data, y_data):
     sess = tf.get_default_session()
     for offset in range(0, num_examples, BATCH_SIZE):
         batch_x, batch_y = X_data[offset:offset+BATCH_SIZE], y_data[offset:offset+BATCH_SIZE]
-        accuracy = sess.run(accuracy_operation, feed_dict={x: batch_x, y: batch_y})
+        accuracy = sess.run(accuracy_operation, feed_dict={x: batch_x, y: batch_y, keep_prob: 1.0})
         total_accuracy += (accuracy * len(batch_x))
     return total_accuracy / num_examples
 
-# Train the Model
-with tf.Session() as sess:
-    sess.run(tf.global_variables_initializer())
-    num_examples = len(X_train)
-    
-    print("Training...")
-    print()
-    for i in range(EPOCHS):
-        X_train, y_train = shuffle(X_train, y_train)
-        for offset in range(0, num_examples, BATCH_SIZE):
-            end = offset + BATCH_SIZE
-            batch_x, batch_y = X_train[offset:end], y_train[offset:end]
-            sess.run(training_operation, feed_dict={x: batch_x, y: batch_y})
-            
-        validation_accuracy = evaluate(X_valid, y_valid)
-        print("EPOCH {} ...".format(i+1))
-        print("Validation Accuracy = {:.3f}".format(validation_accuracy))
-        print()
+saver = tf.train.Saver()
 
+if len(sys.argv) ==1:
+    # Train the Model
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
+        num_examples = len(X_train)
+        
+        print("Training...")
+        print()
+        for i in range(EPOCHS):
+            X_train, y_train = shuffle(X_train, y_train)
+            for offset in range(0, num_examples, BATCH_SIZE):
+                end = offset + BATCH_SIZE
+                batch_x, batch_y = X_train[offset:end], y_train[offset:end]
+                sess.run(training_operation, feed_dict={x: batch_x, y: batch_y,keep_prob: 0.2})
+                
+            validation_accuracy = evaluate(X_valid, y_valid)
+            print("EPOCH {} ...".format(i+1))
+            print("Validation Accuracy = {:.3f}".format(validation_accuracy))
+            print()
+
+        saver.save(sess, './lenet')
+        print("Model saved")
 
 # ---
 # 
@@ -519,6 +528,54 @@ with tf.Session() as sess:
 # 
 
 # In[ ]:
+
+from PIL import Image
+
+def resizeimg(img):
+    new_img = img.resize((32,32))
+    new_img=np.asarray(new_img)
+    return new_img
+
+
+
+if len(sys.argv) ==2:
+    print ("test new images")
+    yieldimg = Image.open('yield.jpg')
+    stopimg = Image.open('stop.jpg')
+    testimg30 = Image.open('30.jpg')
+    testimg50=Image.open('50.jpg')
+    testimg50_be=Image.open('50_be.jpg')
+    testimg50_voll=Image.open('50_voll.jpg')
+    
+
+    # # Displaying the images
+    fig, ax = plt.subplots()
+
+    # # image=dataset['features'][imgNumber]
+    ax.imshow(resizeimg(testimg50))
+    # # ax.set_title(signnameDict[str(dataset['labels'][imgNumber])])
+
+    plt.show()
+    
+    toPrepareImg=np.array([resizeimg(yieldimg),resizeimg(stopimg),resizeimg(testimg30),resizeimg(testimg50),resizeimg(testimg50_be),resizeimg(testimg50_voll)])
+    print (toPrepareImg.shape)
+
+    TestImgs=preprocess(toPrepareImg)
+    Labellist=[13,14]
+
+    with tf.Session() as sess:
+        saver.restore(sess, tf.train.latest_checkpoint('.'))
+
+
+        prediction=tf.argmax(logits,1)
+        print (prediction.eval(feed_dict={x: TestImgs,keep_prob: 1}))
+
+
+
+        # test_accuracy = evaluate(TestImgs, Labellist)
+        # print("Test Accuracy = {:.3f}".format(test_accuracy))
+
+
 
 
 ### Visualize your network's feature maps here.
