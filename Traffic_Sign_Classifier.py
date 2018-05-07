@@ -214,8 +214,34 @@ import numpy as np
 from sklearn.preprocessing import normalize
 
 
+import math
+import tensorflow as tf
+from scipy import ndimage
 
 
+# ### DATA AUGMENTATION ###
+# def rotate_images(X_imgs):
+#     img_list=[]
+#     for img in X_imgs[:10]:
+#         print (img.shape)
+#         rotated = ndimage.rotate(np.array(img), 45, axes=(0,1))
+#         img_list.append(rotated)
+#     return img_list
+    	
+# X_train=np.append(X_train,rotate_images(X_train))
+
+# y_train=np.append(y_train,rotate_images(y_train))
+
+# # print (X_test[0])
+# # print (X_testPost[0])
+# print (X_train.shape)
+
+
+
+
+
+
+### PREPROCESSING ###
 def preprocess(x_data):
     #print("Updated Image Shape: {}".format(x_data.shape))
     #print("Updated Image Shape: {}".format(x_data[0][0]))
@@ -242,9 +268,11 @@ print (X_train.shape)
 print (type(X_train))
 X_train=preprocess(X_train)
 X_valid=preprocess(X_valid)
+IMAGE_SIZE=32
 
-# print (X_test[0])
-# print (X_testPost[0])
+
+#rotation angle in degree
+
 
 
 # Shuffle!
@@ -394,28 +422,27 @@ def evaluate(X_data, y_data):
 
 saver = tf.train.Saver()
 
-if len(sys.argv) ==1:
-    # Train the Model
-    with tf.Session() as sess:
-        sess.run(tf.global_variables_initializer())
-        num_examples = len(X_train)
-        
-        print("Training...")
+# Train the Model
+with tf.Session() as sess:
+    sess.run(tf.global_variables_initializer())
+    num_examples = len(X_train)
+    
+    print("Training...")
+    print()
+    for i in range(EPOCHS):
+        X_train, y_train = shuffle(X_train, y_train)
+        for offset in range(0, num_examples, BATCH_SIZE):
+            end = offset + BATCH_SIZE
+            batch_x, batch_y = X_train[offset:end], y_train[offset:end]
+            sess.run(training_operation, feed_dict={x: batch_x, y: batch_y,keep_prob: 0.2})
+            
+        validation_accuracy = evaluate(X_valid, y_valid)
+        print("EPOCH {} ...".format(i+1))
+        print("Validation Accuracy = {:.3f}".format(validation_accuracy))
         print()
-        for i in range(EPOCHS):
-            X_train, y_train = shuffle(X_train, y_train)
-            for offset in range(0, num_examples, BATCH_SIZE):
-                end = offset + BATCH_SIZE
-                batch_x, batch_y = X_train[offset:end], y_train[offset:end]
-                sess.run(training_operation, feed_dict={x: batch_x, y: batch_y,keep_prob: 0.2})
-                
-            validation_accuracy = evaluate(X_valid, y_valid)
-            print("EPOCH {} ...".format(i+1))
-            print("Validation Accuracy = {:.3f}".format(validation_accuracy))
-            print()
 
-        saver.save(sess, './lenet')
-        print("Model saved")
+    saver.save(sess, './lenet')
+    print("Model saved")
 
 # ---
 # 
