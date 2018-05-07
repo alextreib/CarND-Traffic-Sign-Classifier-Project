@@ -565,7 +565,8 @@ def resizeimg(img):
 
 
 
-if len(sys.argv) ==2:
+if len(sys.argv) == 2:
+    X_testNew=[]
     print ("test new images")
     yieldimg = Image.open('yield.jpg')
     stopimg = Image.open('stop.jpg')
@@ -593,11 +594,8 @@ if len(sys.argv) ==2:
     with tf.Session() as sess:
         saver.restore(sess, tf.train.latest_checkpoint('.'))
 
-
         prediction=tf.argmax(logits,1)
         print (prediction.eval(feed_dict={x: TestImgs,keep_prob: 1}))
-
-
 
         # test_accuracy = evaluate(TestImgs, Labellist)
         # print("Test Accuracy = {:.3f}".format(test_accuracy))
