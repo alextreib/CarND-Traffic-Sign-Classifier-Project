@@ -49,15 +49,7 @@ The goals / steps of this project are the following:
 * Summarize the results with a written report
 
 ---
-### Writeup / README
-
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
-
-You're reading it! and here is a link to my [project code](https://github.com/alextreib/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb )
-
 ### Data Set Summary & Exploration
-
-#### 1. Provide a basic summary of the data set. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
 
 I used the pandas library to calculate summary statistics of the traffic signs data set:
 
@@ -67,12 +59,12 @@ I used the pandas library to calculate summary statistics of the traffic signs d
 * The shape of a traffic sign image is (32, 32, 3)
 * The number of unique classes/labels in the data set is 43
 
-#### 2. Include an exploratory visualization of the dataset.
+#### Include an exploratory visualization of the dataset.
 
 Here is an exploratory visualization of the data set. 
 The two bar chart diagrams show the distribution of the classes within the different datasets.
 
-![Dataset Overview](doc/dataset_overview.jpg)
+![Dataset Overview](doc/dataset_overview.png)
 
 ### Design and Test a Model Architecture
 
@@ -80,21 +72,21 @@ The two bar chart diagrams show the distribution of the classes within the diffe
 
 The input image looks like the following (before preprocessing):
 
-![Raw input image](doc/raw_input.jpg)
+![Raw input image](doc/raw_input.png)
 
 As a first step, I decided to convert the images to grayscale because the RGB format would end in much more features that are unrelevant for the network.
 Therefore the network has a hard time trying to classify the image although it could be easier.
 
 Furthermore, the image has been normalized because the neural network can handle normalized data better than unnormalized data (overshooting problems).
 
-![Preprocessed image](doc/preprocessed_image.jpg)
+![Preprocessed image](doc/preprocessed_image.png)
 
 #### 2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
 My final model consisted of the following layers according to the paper "Traffic Sign Recognition with Multi-Scale Convolutional Networks".
 Here is a visualization of the network:
 
-![Enhanced LeNet Architecture](doc/lenet_architecture.jpg)
+![Enhanced LeNet Architecture](doc/lenet_architecture.png)
 
 The detailled architecture with Padding, Pooling, ReLU, dropout and filtersize are documented in the code. (see ipython or html)
 
