@@ -33,10 +33,10 @@ cd CarND-Traffic-Sign-Classifier-Project
 jupyter notebook Traffic_Sign_Classifier.ipynb
 ```
 
+---
 
 Writeup
 ---
-
 
 **Build a Traffic Sign Recognition Project**
 
@@ -48,8 +48,11 @@ The goals / steps of this project are the following:
 * Analyze the softmax probabilities of the new images
 * Summarize the results with a written report
 
----
-### Data Set Summary & Exploration
+
+
+### Dataset Exploration
+
+#### Dataset Summary
 
 I used the pandas library to calculate summary statistics of the traffic signs data set:
 
@@ -59,7 +62,7 @@ I used the pandas library to calculate summary statistics of the traffic signs d
 * The shape of a traffic sign image is (32, 32, 3)
 * The number of unique classes/labels in the data set is 43
 
-#### Include an exploratory visualization of the dataset.
+#### Exploratory Visualization
 
 Here is an exploratory visualization of the data set. 
 The two bar chart diagrams show the distribution of the classes within the different datasets.
@@ -68,7 +71,7 @@ The two bar chart diagrams show the distribution of the classes within the diffe
 
 ### Design and Test a Model Architecture
 
-#### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. 
+#### Preprocessing 
 
 The input image looks like the following (before preprocessing):
 
@@ -81,7 +84,7 @@ Furthermore, the image has been normalized because the neural network can handle
 
 ![Preprocessed image](doc/preprocessed_image.jpg)
 
-#### 2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
+#### Model architecture
 
 My final model consisted of the following layers according to the paper "Traffic Sign Recognition with Multi-Scale Convolutional Networks".
 Here is a visualization of the network:
@@ -94,14 +97,14 @@ This specific architecture is chosen because it performs under all the tested va
 
 Furthermore, as in the above mentioned paper is stated, this architecture fits perfectly for traffic sign recognition.
 
-#### Training of the model
+#### Model Training
 
 To train the model, an AdamOptimizer is used because it performs best among other commonly used optimizers for the MNIST dataset. Therefore, it is chosen and was also the best optimizer tested (without prove here).
 Moreover, the learning rate was slightly variated within the rate 0.008 - 0.015 but the best results were performs by the learning 0.001, why it is set to this value.
 
 The number of epochs has be increased to 40 in order to achieve these results, what also increases the training time.
 
-#### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+#### Solution Approach
 
 My final model results were:
 * training set accuracy of ?
@@ -120,18 +123,18 @@ Most of them were tuned fine out of the lecture, but some (for example the epoch
 
 ### Test a Model on New Images
 
-#### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
+#### Acquiring New Images
 
 Here are 8 German traffic signs that I found on the web: Folder test_images
 
 These images consists of synthetical images and real images, just to test both. 
 But no correlation between real image and wrong classification could be found. 
 
-#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set 
+#### Performance on New Images
 
 The detailed results of the classification can be found in the html file, but the accuracy of the total classification of the test images from the internet was 0.625. 
 
-#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. 
+#### Model Certainty - Softmax Probabilities
 
 The code for making predictions on my final model is located in the 52th cell of the Ipython notebook.
 
