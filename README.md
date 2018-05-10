@@ -64,7 +64,7 @@ I used the pandas library to calculate summary statistics of the traffic signs d
 Here is an exploratory visualization of the data set. 
 The two bar chart diagrams show the distribution of the classes within the different datasets.
 
-![Dataset Overview](doc/dataset_overview.png)
+![Dataset Overview](doc/dataset_overview.jpg)
 
 ### Design and Test a Model Architecture
 
@@ -72,21 +72,21 @@ The two bar chart diagrams show the distribution of the classes within the diffe
 
 The input image looks like the following (before preprocessing):
 
-![Raw input image](doc/raw_input.png)
+![Raw input image](doc/raw_input.jpg)
 
 As a first step, I decided to convert the images to grayscale because the RGB format would end in much more features that are unrelevant for the network.
 Therefore the network has a hard time trying to classify the image although it could be easier.
 
 Furthermore, the image has been normalized because the neural network can handle normalized data better than unnormalized data (overshooting problems).
 
-![Preprocessed image](doc/preprocessed_image.png)
+![Preprocessed image](doc/preprocessed_image.jpg)
 
 #### 2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
 My final model consisted of the following layers according to the paper "Traffic Sign Recognition with Multi-Scale Convolutional Networks".
 Here is a visualization of the network:
 
-![Enhanced LeNet Architecture](doc/lenet_architecture.png)
+![Enhanced LeNet Architecture](doc/lenet_architecture.jpg)
 
 The detailled architecture with Padding, Pooling, ReLU, dropout and filtersize are documented in the code. (see ipython or html)
 
