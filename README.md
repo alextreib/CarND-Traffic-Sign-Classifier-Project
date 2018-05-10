@@ -49,7 +49,6 @@ The goals / steps of this project are the following:
 * Summarize the results with a written report
 
 
-
 ### Dataset Exploration
 
 #### Dataset Summary
@@ -106,10 +105,9 @@ The number of epochs has be increased to 40 in order to achieve these results, w
 
 #### Solution Approach
 
-My final model results were:
-* training set accuracy of ?
+My final model results are:
+* training set accuracy of 1.00
 * validation set accuracy of 0.96
-* test set accuracy of ?
 
 As a starting point the architecture of the above mentioned paper is used, which works very good out of the box.
 
@@ -120,19 +118,19 @@ For example, a dropout between the ConvNet and the fully connected layers turned
 Several parameters were turned to check whether it provides the possibility to improve the training.
 Most of them were tuned fine out of the lecture, but some (for example the epoche size) are doing huge improvements.
 
-
 ### Test a Model on New Images
 
 #### Acquiring New Images
 
-Here are 8 German traffic signs that I found on the web: Folder test_images
+[Here](test_images) are 8 German traffic signs that I found on the web.
 
 These images consists of synthetical images and real images, just to test both. 
 But no correlation between real image and wrong classification could be found. 
 
 #### Performance on New Images
 
-The detailed results of the classification can be found in the html file, but the accuracy of the total classification of the test images from the internet was 0.625. 
+Detailled results of the classification can be found in the html file.
+The accuracy of the total classification of the test images from the internet was 0.625. 
 
 #### Model Certainty - Softmax Probabilities
 
