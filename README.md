@@ -40,15 +40,6 @@ Writeup
 
 **Build a Traffic Sign Recognition Project**
 
-The goals / steps of this project are the following:
-* Load the data set (see below for links to the project data set)
-* Explore, summarize and visualize the data set
-* Design, train and test a model architecture
-* Use the model to make predictions on new images
-* Analyze the softmax probabilities of the new images
-* Summarize the results with a written report
-
-
 ### Dataset Exploration
 
 #### Dataset Summary
@@ -76,8 +67,8 @@ The input image looks like the following (before preprocessing):
 
 ![Raw input image](doc/raw_input.jpg)
 
-As a first step, I decided to convert the images to grayscale because the RGB format would end in much more features that are unrelevant for the network.
-Therefore the network has a hard time trying to classify the image although it could be easier.
+As a first step, I decided to convert the images to grayscale because the RGB format would end up in much more features that are unrelevant for the network.
+Hence the network would have a hard time trying to classify the image with a lof of unrelevant features although it could be easier.
 
 Furthermore, the image has been normalized because the neural network can handle normalized data better than unnormalized data (overshooting problems).
 
@@ -90,7 +81,7 @@ Here is a visualization of the network:
 
 ![Enhanced LeNet Architecture](doc/lenet_architecture.jpg)
 
-The detailled architecture with Padding, Pooling, ReLU, dropout and filtersize are documented in the code. (see ipython or html)
+The detailed architecture with padding, pooling, activation functions, dropout and filtersize are documented in the code cell 7.
 
 This specific architecture is chosen because it performs under all the tested variations (see below) the best possible. 
 
@@ -99,7 +90,7 @@ Furthermore, as in the above mentioned paper is stated, this architecture fits p
 #### Model Training
 
 To train the model, an AdamOptimizer is used because it performs best among other commonly used optimizers for the MNIST dataset. Therefore, it is chosen and was also the best optimizer tested (without prove here).
-Moreover, the learning rate was slightly variated within the rate 0.008 - 0.015 but the best results were performs by the learning 0.001, why it is set to this value.
+Moreover, the learning rate was slightly variated within the rate 0.008 - 0.015 but the best results were performs by the learning 0.001, why it remains to this value.
 
 The number of epochs has be increased to 40 in order to achieve these results, what also increases the training time.
 
@@ -125,18 +116,18 @@ Most of them were tuned fine out of the lecture, but some (for example the epoch
 [Here](test_images) are 8 German traffic signs that I found on the web.
 
 These images consists of synthetical images and real images, just to test both. 
-But no correlation between real image and wrong classification could be found. 
+But no correlation between real image and wrong classification was detected. 
 
 #### Performance on New Images
 
-Detailled results of the classification can be found in the html file.
+Detailed results of the classification can be found in the html file in cell 28.
 The accuracy of the total classification of the test images from the internet was 0.625. 
 
 #### Model Certainty - Softmax Probabilities
 
-The code for making predictions on my final model is located in the 52th cell of the Ipython notebook.
+The code for making predictions on my final model is located in the 27th cell of the html file.
 
-The results are also printed directly into the console of the ipython notebook (or html file).
+The results are also printed directly into the console of the html file.
 
 Most of the times, the model has a very high probability (above 98%), then the predicition is usually correct. 
 When the highest probability drops below 94%, it is unlikely that the prediction is really correct.
